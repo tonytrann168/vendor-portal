@@ -22,18 +22,19 @@ export async function GET(request: NextRequest) {
   if (type === 'vendor') {
     // Link auth_user_id to vendor record on first login
     const admin = createAdminClient()
-    const { data: vendor } = await admin
+    const { data: vendorRow } = await admin
       .from('vendors')
       .select('id, auth_user_id')
       .eq('email', user.email!)
       .is('auth_user_id', null)
-      .single()
+      .single() as { data: { id: string; auth_user_id: string | null } | null; error: unknown }
 
-    if (vendor) {
-      await admin
+    if (vendorRow) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      await (admin as any)
         .from('vendors')
         .update({ auth_user_id: user.id })
-        .eq('id', vendor.id)
+        .eq('id', vendorRow.id)
     }
 
     return NextResponse.redirect(`${origin}/portal`)
