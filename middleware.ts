@@ -34,13 +34,15 @@ export async function middleware(request: NextRequest) {
   if (!user && !isPublic) {
     const url = request.nextUrl.clone()
     url.pathname = '/login'
-    return NextResponse.redirect(url)
+    supabaseResponse = NextResponse.redirect(url)
+    return supabaseResponse
   }
 
   if (user && pathname === '/login') {
     const url = request.nextUrl.clone()
     url.pathname = '/dashboard'
-    return NextResponse.redirect(url)
+    supabaseResponse = NextResponse.redirect(url)
+    return supabaseResponse
   }
 
   return supabaseResponse

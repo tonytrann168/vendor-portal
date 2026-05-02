@@ -31,10 +31,14 @@ export async function GET(request: NextRequest) {
 
     if (vendorRow) {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      await (admin as any)
+      const { error: updateError } = await (admin as any)
         .from('vendors')
         .update({ auth_user_id: user.id })
         .eq('id', vendorRow.id)
+
+      if (updateError) {
+        return NextResponse.redirect(`${origin}/login?error=link_failed`)
+      }
     }
 
     return NextResponse.redirect(`${origin}/portal`)
