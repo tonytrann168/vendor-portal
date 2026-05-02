@@ -5,11 +5,11 @@ import { LayoutDashboard, Users, FolderKanban, ClipboardCheck, Settings, Buildin
 import { cn } from '@/lib/utils'
 
 const navItems = [
-  { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
-  { href: '/vendors', label: 'Vendors', icon: Users },
-  { href: '/review', label: 'Review Queue', icon: ClipboardCheck },
-  { href: '/projects', label: 'Projects', icon: FolderKanban },
-  { href: '/settings/requirements', label: 'Settings', icon: Settings },
+  { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard, match: 'exact' as const },
+  { href: '/vendors', label: 'Vendors', icon: Users, match: 'prefix' as const },
+  { href: '/review', label: 'Review Queue', icon: ClipboardCheck, match: 'exact' as const },
+  { href: '/projects', label: 'Projects', icon: FolderKanban, match: 'prefix' as const },
+  { href: '/settings/requirements', label: 'Settings', icon: Settings, match: 'prefix' as const, activePrefix: '/settings' },
 ]
 
 export function Sidebar() {
@@ -21,23 +21,26 @@ export function Sidebar() {
         <span className="font-bold text-white text-lg">VendorOS</span>
       </div>
       <nav className="flex-1 px-3 py-4 space-y-1">
-        {navItems.map(({ href, label, icon: Icon }) => (
-          <Link
-            key={href}
-            href={href}
-            className={cn(
-              'flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium transition-colors',
-              pathname.startsWith(href) && href !== '/dashboard'
-                ? 'bg-indigo-600 text-white'
-                : pathname === href
-                ? 'bg-indigo-600 text-white'
-                : 'text-slate-400 hover:text-white hover:bg-white/10'
-            )}
-          >
-            <Icon className="h-4 w-4" />
-            {label}
-          </Link>
-        ))}
+        {navItems.map(({ href, label, icon: Icon, match, activePrefix }) => {
+          const isActive = match === 'exact'
+            ? pathname === href
+            : pathname.startsWith(activePrefix ?? href)
+          return (
+            <Link
+              key={href}
+              href={href}
+              className={cn(
+                'flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium transition-colors',
+                isActive
+                  ? 'bg-indigo-600 text-white'
+                  : 'text-slate-400 hover:text-white hover:bg-white/10'
+              )}
+            >
+              <Icon className="h-4 w-4" />
+              {label}
+            </Link>
+          )
+        })}
       </nav>
     </aside>
   )
