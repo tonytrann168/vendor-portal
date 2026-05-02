@@ -14,7 +14,7 @@ export interface Database {
         Update: Partial<Database['public']['Tables']['companies']['Insert']>
       }
       users: {
-        Row: { id: string; company_id: string; email: string; full_name: string; role: UserRole }
+        Row: { id: string; company_id: string; email: string; full_name: string; role: UserRole; created_at: string }
         Insert: { id: string; company_id: string; email: string; full_name: string; role: UserRole }
         Update: Partial<{ full_name: string; role: UserRole }>
       }
@@ -52,7 +52,7 @@ export interface Database {
           uploaded_at: string
         }
         Insert: { vendor_id: string; requirement_id: string; file_url: string; file_name: string; expiration_date?: string | null }
-        Update: Partial<{ status: DocumentStatus; expiration_date: string | null; reviewed_by: string; reviewed_at: string; rejection_reason: string | null }>
+        Update: Partial<{ status: DocumentStatus; expiration_date: string | null; reviewed_by: string | null; reviewed_at: string | null; rejection_reason: string | null }>
       }
       approval_log: {
         Row: { id: string; vendor_id: string; document_id: string; action: ApprovalAction; performed_by: string | null; note: string | null; created_at: string }
