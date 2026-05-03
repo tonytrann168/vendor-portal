@@ -117,13 +117,13 @@ CREATE TRIGGER recompute_vendor_status
   FOR EACH ROW
   EXECUTE FUNCTION trigger_compute_vendor_status();
 
--- Nightly pg_cron job: re-evaluate all vendors to catch overnight expirations
-SELECT cron.schedule(
-  'nightly-vendor-status-recompute',
-  '0 0 * * *',
-  $$
-    UPDATE vendors
-    SET status = compute_vendor_status(id),
-        updated_at = now();
-  $$
-);
+-- NOTE: pg_cron (nightly status recompute) requires enabling the pg_cron extension
+-- in Supabase dashboard → Database → Extensions. On free plan you can skip it —
+-- the trigger above handles all real-time recomputation on document upload/review.
+-- If pg_cron is enabled, run manually:
+--
+-- SELECT cron.schedule(
+--   'nightly-vendor-status-recompute',
+--   '0 0 * * *',
+--   $$ UPDATE vendors SET status = compute_vendor_status(id), updated_at = now(); $$
+-- );
