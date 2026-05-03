@@ -1,6 +1,7 @@
 import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import { TopBar } from '@/components/layout/top-bar'
+import { SettingsNav } from '@/components/layout/settings-nav'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import type { UserRole } from '@/lib/types'
@@ -29,8 +30,9 @@ export default async function TeamSettingsPage() {
 
   return (
     <>
-      <TopBar title="Team Members" />
+      <TopBar title="Settings" />
       <div className="p-6">
+        <SettingsNav />
         <Card className="max-w-2xl">
           <CardHeader>
             <CardTitle className="text-base">Team</CardTitle>

@@ -1,6 +1,7 @@
 import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import { TopBar } from '@/components/layout/top-bar'
+import { SettingsNav } from '@/components/layout/settings-nav'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -25,8 +26,9 @@ export default async function RequirementsSettingsPage() {
 
   return (
     <>
-      <TopBar title="Document Requirements" />
+      <TopBar title="Settings" />
       <div className="p-6 space-y-6">
+        <SettingsNav />
         <div className="grid grid-cols-2 gap-6">
           <Card>
             <CardHeader><CardTitle className="text-base">Configured Requirements</CardTitle></CardHeader>
