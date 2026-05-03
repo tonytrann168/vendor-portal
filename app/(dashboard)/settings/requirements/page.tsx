@@ -59,7 +59,7 @@ export default async function RequirementsSettingsPage() {
             <Card>
               <CardHeader><CardTitle className="text-base">Add Requirement</CardTitle></CardHeader>
               <CardContent>
-                <form action={createRequirement} className="space-y-4">
+                <form action={createRequirement as unknown as (fd: FormData) => Promise<void>} className="space-y-4">
                   <div className="space-y-2">
                     <Label htmlFor="name">Name *</Label>
                     <Input id="name" name="name" required />

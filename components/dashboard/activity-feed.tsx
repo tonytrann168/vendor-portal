@@ -31,7 +31,7 @@ export function ActivityFeed({ items }: { items: ActivityItem[] }) {
                 {item.action.replace('_', ' ')} — {item.vendors?.name}
               </p>
               <p className="text-xs text-muted-foreground">
-                {formatDistanceToNow(new Date(item.created_at), { addSuffix: true })}
+                {formatDistanceToNow(new Date(item.created_at!), { addSuffix: true })}
               </p>
             </div>
           </div>

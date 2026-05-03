@@ -89,7 +89,7 @@ export default async function ReviewQueuePage({
                           {' — '}{req.name}
                         </CardTitle>
                         <p className="text-xs text-muted-foreground mt-0.5">
-                          {doc.file_name} · Uploaded {format(new Date(doc.uploaded_at), 'MMM d, yyyy h:mm a')} · Owner: {req.owner_role}
+                          {doc.file_name} · Uploaded {format(new Date(doc.uploaded_at!), 'MMM d, yyyy h:mm a')} · Owner: {req.owner_role}
                         </p>
                       </div>
                       <StatusBadge status={doc.status} />

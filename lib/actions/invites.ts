@@ -37,7 +37,7 @@ export async function generateAndSendInvite(vendorId: string) {
 
   if (inviteError) return { error: inviteError.message }
 
-  const inviteUrl = `${process.env.NEXT_PUBLIC_APP_URL}/portal/${invite.token}`
+  const inviteUrl = `${process.env.NEXT_PUBLIC_APP_URL}/portal/invite/${invite.token}`
 
   const { error: emailError } = await sendVendorInvite({
     to: vendor.email,

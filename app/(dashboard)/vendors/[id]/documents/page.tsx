@@ -60,7 +60,7 @@ export default async function VendorDocumentsPage({ params }: { params: { id: st
                   <div>
                     <CardTitle className="text-base">{req.name}</CardTitle>
                     <p className="text-xs text-muted-foreground mt-1">
-                      {req.doc.file_name} · Uploaded {format(new Date(req.doc.uploaded_at), 'MMM d, yyyy')}
+                      {req.doc.file_name} · Uploaded {format(new Date(req.doc.uploaded_at!), 'MMM d, yyyy')}
                     </p>
                   </div>
                   <StatusBadge status={req.doc.status} />

@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { Button } from '@/components/ui/button'
+import { buttonVariants } from '@/components/ui/button'
 import { StatusBadge } from '@/components/shared/status-badge'
 import { Upload, RefreshCw } from 'lucide-react'
 import { format } from 'date-fns'
@@ -53,15 +53,13 @@ export function RequirementCard({
 
       {/* Upload / re-upload CTA */}
       {(!doc || doc.status === 'rejected' || isRevisionRequested) && (
-        <Button size="sm" className="w-full mt-1" asChild>
-          <Link href={`/portal/${vendorId}/upload/${req.id}`}>
-            {doc ? (
-              <><RefreshCw className="h-3 w-3 mr-1" />Re-upload</>
-            ) : (
-              <><Upload className="h-3 w-3 mr-1" />Upload</>
-            )}
-          </Link>
-        </Button>
+        <Link href={`/portal/${vendorId}/upload/${req.id}`} className={buttonVariants({ size: 'sm', className: 'w-full mt-1' })}>
+          {doc ? (
+            <><RefreshCw className="h-3 w-3 mr-1" />Re-upload</>
+          ) : (
+            <><Upload className="h-3 w-3 mr-1" />Upload</>
+          )}
+        </Link>
       )}
     </div>
   )

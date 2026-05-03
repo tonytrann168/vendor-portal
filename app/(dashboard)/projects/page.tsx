@@ -51,7 +51,7 @@ export default async function ProjectsPage() {
           <Card className="max-w-md">
             <CardHeader><CardTitle className="text-base">New Project</CardTitle></CardHeader>
             <CardContent>
-              <form action={createProject} className="space-y-3">
+              <form action={createProject as unknown as (fd: FormData) => Promise<void>} className="space-y-3">
                 <div className="space-y-1"><Label>Name *</Label><Input name="name" required /></div>
                 <div className="space-y-1"><Label>Address</Label><Input name="address" /></div>
                 <div className="space-y-1"><Label>Start Date</Label><Input name="start_date" type="date" /></div>

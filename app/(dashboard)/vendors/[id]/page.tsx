@@ -7,7 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { formatDistanceToNow, format } from 'date-fns'
 import Link from 'next/link'
-import { Button } from '@/components/ui/button'
+import { Button, buttonVariants } from '@/components/ui/button'
 import { FileText } from 'lucide-react'
 import type { RequirementWithLatestDoc } from '@/lib/types'
 
@@ -59,11 +59,9 @@ export default async function VendorProfilePage({ params }: { params: { id: stri
           <div className="flex items-center gap-3">
             <StatusBadge status={vendor.status} />
             <InviteButton vendorId={vendor.id} />
-            <Button variant="outline" size="sm" asChild>
-              <Link href={`/vendors/${vendor.id}/documents`}>
-                <FileText className="h-4 w-4 mr-1" />Review Docs
-              </Link>
-            </Button>
+            <Link href={`/vendors/${vendor.id}/documents`} className={buttonVariants({ variant: 'outline', size: 'sm' })}>
+              <FileText className="h-4 w-4 mr-1" />Review Docs
+            </Link>
           </div>
         </div>
 
@@ -113,7 +111,7 @@ export default async function VendorProfilePage({ params }: { params: { id: stri
                 {auditLog.map(entry => (
                   <div key={entry.id} className="flex gap-3 text-sm">
                     <div className="w-32 text-xs text-muted-foreground flex-shrink-0 pt-0.5">
-                      {formatDistanceToNow(new Date(entry.created_at), { addSuffix: true })}
+                      {formatDistanceToNow(new Date(entry.created_at!), { addSuffix: true })}
                     </div>
                     <div>
                       <span className="font-medium capitalize">{entry.action.replace('_', ' ')}</span>

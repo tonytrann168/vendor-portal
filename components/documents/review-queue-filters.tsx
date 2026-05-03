@@ -25,8 +25,8 @@ export function ReviewQueueFilters({ userRole }: { userRole: string }) {
         className="max-w-xs"
       />
       <Select
-        defaultValue={searchParams.get('role') ?? userRole}
-        onValueChange={v => updateFilter('role', v)}
+        defaultValue={searchParams.get('role') ?? userRole ?? ''}
+        onValueChange={v => updateFilter('role', v ?? '')}
       >
         <SelectTrigger className="w-44">
           <SelectValue placeholder="Filter by role" />
