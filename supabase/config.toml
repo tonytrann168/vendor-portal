@@ -1,0 +1,8 @@
+[project]
+# project_id is found in your Supabase dashboard URL:
+# https://supabase.com/dashboard/project/<project_id>
+project_id = "your-project-id"
+
+[functions.nightly-status-recompute]
+verify_jwt = false
+schedule = "0 0 * * *"

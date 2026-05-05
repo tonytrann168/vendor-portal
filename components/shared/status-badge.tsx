@@ -1,8 +1,5 @@
 import { Badge } from '@/components/ui/badge'
 import { cn } from '@/lib/utils'
-import type { VendorStatus, DocumentStatus } from '@/lib/types'
-
-type AnyStatus = VendorStatus | DocumentStatus
 
 const statusConfig: Record<string, { label: string; className: string }> = {
   approved:      { label: 'Approved',      className: 'bg-green-800 text-green-300 dark:bg-green-900 dark:text-green-300 border-0' },

@@ -35,7 +35,7 @@ export function RequirementCard({
             {!req.is_required ? ' · Optional' : ''}
           </p>
         </div>
-        <StatusBadge status={doc ? doc.status : 'incomplete' as any} />
+        <StatusBadge status={doc ? doc.status : 'incomplete'} />
       </div>
 
       {/* Rejection / revision reason — shown prominently, not hidden */}

@@ -44,6 +44,7 @@ export default async function PortalTokenPage({ params }: { params: { token: str
   }
 
   // Mark invite as accepted
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   await (admin as any)
     .from('vendor_invites')
     .update({ accepted_at: new Date().toISOString() })
@@ -64,10 +65,25 @@ export default async function PortalTokenPage({ params }: { params: { token: str
   const supabase = createClient()
   const redirectTo = `${process.env.NEXT_PUBLIC_APP_URL}/auth/callback?type=vendor`
 
-  await supabase.auth.signInWithOtp({
+  const { error: otpError } = await supabase.auth.signInWithOtp({
     email: invite.email,
     options: { emailRedirectTo: redirectTo, shouldCreateUser: true },
   })
+
+  if (otpError) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-background">
+        <Card className="max-w-sm w-full">
+          <CardHeader>
+            <CardTitle>Something went wrong</CardTitle>
+            <CardDescription>
+              We couldn&apos;t send a sign-in link to <strong>{invite.email}</strong>. Please contact your GC and ask them to resend the invite.
+            </CardDescription>
+          </CardHeader>
+        </Card>
+      </div>
+    )
+  }
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-background">

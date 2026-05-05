@@ -7,7 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { formatDistanceToNow, format } from 'date-fns'
 import Link from 'next/link'
-import { Button, buttonVariants } from '@/components/ui/button'
+import { buttonVariants } from '@/components/ui/button'
 import { FileText } from 'lucide-react'
 import type { RequirementWithLatestDoc } from '@/lib/types'
 
@@ -108,23 +108,27 @@ export default async function VendorProfilePage({ params }: { params: { id: stri
               <p className="text-sm text-muted-foreground">No activity yet.</p>
             ) : (
               <div className="space-y-3">
-                {auditLog.map(entry => (
-                  <div key={entry.id} className="flex gap-3 text-sm">
-                    <div className="w-32 text-xs text-muted-foreground flex-shrink-0 pt-0.5">
-                      {formatDistanceToNow(new Date(entry.created_at!), { addSuffix: true })}
+                {auditLog.map(entry => {
+                  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                  const e = entry as any
+                  return (
+                    <div key={entry.id} className="flex gap-3 text-sm">
+                      <div className="w-32 text-xs text-muted-foreground flex-shrink-0 pt-0.5">
+                        {formatDistanceToNow(new Date(entry.created_at!), { addSuffix: true })}
+                      </div>
+                      <div>
+                        <span className="font-medium capitalize">{entry.action.replace('_', ' ')}</span>
+                        {e.vendor_documents?.document_requirements?.name && (
+                          <span className="text-muted-foreground"> — {e.vendor_documents.document_requirements.name}</span>
+                        )}
+                        {e.users?.full_name && (
+                          <span className="text-muted-foreground"> by {e.users.full_name}</span>
+                        )}
+                        {entry.note && <p className="text-xs text-muted-foreground mt-0.5">&quot;{entry.note}&quot;</p>}
+                      </div>
                     </div>
-                    <div>
-                      <span className="font-medium capitalize">{entry.action.replace('_', ' ')}</span>
-                      {(entry as any).vendor_documents?.document_requirements?.name && (
-                        <span className="text-muted-foreground"> — {(entry as any).vendor_documents.document_requirements.name}</span>
-                      )}
-                      {(entry as any).users?.full_name && (
-                        <span className="text-muted-foreground"> by {(entry as any).users.full_name}</span>
-                      )}
-                      {entry.note && <p className="text-xs text-muted-foreground mt-0.5">"{entry.note}"</p>}
-                    </div>
-                  </div>
-                ))}
+                  )
+                })}
               </div>
             )}
           </CardContent>

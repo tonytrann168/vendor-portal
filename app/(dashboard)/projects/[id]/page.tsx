@@ -44,6 +44,7 @@ export default async function ProjectDetailPage({ params }: { params: { id: stri
                 <p className="text-sm text-muted-foreground">No vendors assigned yet.</p>
               )}
               {(projectVendors ?? []).map(pv => {
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 const v = (pv as any).vendors
                 return (
                   <div key={pv.id} className="flex items-center justify-between">

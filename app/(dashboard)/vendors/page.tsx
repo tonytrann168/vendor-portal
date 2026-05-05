@@ -29,7 +29,7 @@ export default async function VendorsPage() {
           <CardHeader className="flex flex-row items-center justify-between">
             <CardTitle>All Vendors</CardTitle>
             {['admin', 'compliance', 'pm'].includes(currentUser?.role ?? '') && (
-              <AddVendorDialog companyId={currentUser!.company_id} />
+              <AddVendorDialog />
             )}
           </CardHeader>
           <CardContent>

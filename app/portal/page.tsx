@@ -8,7 +8,7 @@ import { Label } from '@/components/ui/label'
 export default async function PortalLandingPage({
   searchParams,
 }: {
-  searchParams: { sent?: string }
+  searchParams: { sent?: string; error?: string }
 }) {
   const supabase = createClient()
   const { data: { user } } = await supabase.auth.getUser()
@@ -27,13 +27,14 @@ export default async function PortalLandingPage({
     'use server'
     const email = formData.get('email') as string
     const supabase = createClient()
-    await supabase.auth.signInWithOtp({
+    const { error } = await supabase.auth.signInWithOtp({
       email,
       options: {
         emailRedirectTo: `${process.env.NEXT_PUBLIC_APP_URL}/auth/callback?type=vendor`,
         shouldCreateUser: false,
       },
     })
+    if (error) redirect(`/portal?error=1`)
     redirect(`/portal?sent=1`)
   }
 
@@ -45,10 +46,12 @@ export default async function PortalLandingPage({
           <CardDescription>
             {searchParams.sent
               ? 'Check your email for a sign-in link.'
+              : searchParams.error
+              ? 'Something went wrong sending your sign-in link. Please try again.'
               : 'Enter your email to receive a sign-in link.'}
           </CardDescription>
         </CardHeader>
-        {!searchParams.sent && (
+        {(!searchParams.sent || searchParams.error) && (
           <CardContent>
             <form action={sendMagicLink} className="space-y-4">
               <div className="space-y-2">

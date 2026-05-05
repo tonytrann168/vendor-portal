@@ -33,7 +33,7 @@ export default async function ReviewQueuePage({
     `)
     .eq('status', 'pending')
     .eq('vendors.company_id', currentUser.company_id)
-    .order('uploaded_at', { ascending: true })
+    .order('uploaded_at', { ascending: false })
 
   if (roleFilter && roleFilter !== 'all') {
     query = query.eq('document_requirements.owner_role', roleFilter)
@@ -75,7 +75,9 @@ export default async function ReviewQueuePage({
         ) : (
           <div className="space-y-4">
             {deduped.map(doc => {
+              // eslint-disable-next-line @typescript-eslint/no-explicit-any
               const vendor = (doc as any).vendors
+              // eslint-disable-next-line @typescript-eslint/no-explicit-any
               const req = (doc as any).document_requirements
               return (
                 <Card key={doc.id}>

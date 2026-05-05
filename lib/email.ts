@@ -14,7 +14,7 @@ export async function sendVendorInvite({
   inviteUrl: string
 }) {
   const { data, error } = await resend.emails.send({
-    from: 'VendorOS <noreply@yourdomain.com>',
+    from: 'VendorOS <noreply@vendor-docs.app>',
     to,
     subject: `${companyName} has invited you to submit compliance documents`,
     html: `
