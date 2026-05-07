@@ -20,7 +20,7 @@ export default async function PortalLandingPage({
       .eq('auth_user_id', user.id)
       .single()
 
-    if (vendor) redirect(`/portal/checklist`)
+    if (vendor) redirect(`/portal/${vendor.id}/checklist`)
   }
 
   async function sendMagicLink(formData: FormData) {

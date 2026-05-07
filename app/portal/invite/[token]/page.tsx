@@ -43,13 +43,6 @@ export default async function PortalTokenPage({ params }: { params: { token: str
     )
   }
 
-  // Mark invite as accepted
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  await (admin as any)
-    .from('vendor_invites')
-    .update({ accepted_at: new Date().toISOString() })
-    .eq('id', invite.id)
-
   // Check if vendor already has an account
   const { data: vendor } = await admin
     .from('vendors')
@@ -58,6 +51,11 @@ export default async function PortalTokenPage({ params }: { params: { token: str
     .single()
 
   if (vendor?.auth_user_id) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    await (admin as any)
+      .from('vendor_invites')
+      .update({ accepted_at: new Date().toISOString() })
+      .eq('id', invite.id)
     redirect('/portal')
   }
 
@@ -84,6 +82,13 @@ export default async function PortalTokenPage({ params }: { params: { token: str
       </div>
     )
   }
+
+  // Mark invite as accepted only after the magic link was successfully sent
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  await (admin as any)
+    .from('vendor_invites')
+    .update({ accepted_at: new Date().toISOString() })
+    .eq('id', invite.id)
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-background">
