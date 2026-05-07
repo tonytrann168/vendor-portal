@@ -34,9 +34,11 @@ const config: Config = {
           foreground: "var(--muted-foreground)",
         },
         accent: {
-          DEFAULT: "var(--accent)",
-          foreground: "var(--accent-foreground)",
+          DEFAULT: "#3b82f6",
+          soft: "#eff6ff",
+          foreground: "#ffffff",
         },
+        "text-muted": "var(--muted-foreground)",
         destructive: {
           DEFAULT: "var(--destructive)",
           foreground: "oklch(0.985 0 0)",
@@ -79,10 +81,15 @@ const config: Config = {
           from: { height: "var(--radix-accordion-content-height)" },
           to: { height: "0" },
         },
+        "bounce-slow": {
+          "0%, 100%": { transform: "translateY(0)" },
+          "50%": { transform: "translateY(-10px)" },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
+        "bounce-slow": "bounce-slow 3s ease-in-out infinite",
       },
     },
   },
