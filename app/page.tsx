@@ -223,8 +223,8 @@ export default function Home() {
                           <p className="text-xs text-gray-400">{v.trade}</p>
                         </div>
                       </div>
-                      <span className={`inline-flex items-center gap-1.5 text-[11px] font-semibold px-2.5 py-1 rounded-full ${cfg.badge}`}>
-                        <span className={`w-1.5 h-1.5 rounded-full ${cfg.dot}`} />
+                      <span className={`inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-full ${cfg.badge}`}>
+                        <span className={`w-1.5 h-1.5 rounded-full ${cfg.dot} ${['expired', 'expiring'].includes(v.status) ? 'animate-pulse' : ''}`} />
                         {cfg.label}
                       </span>
                     </div>
@@ -247,6 +247,36 @@ export default function Home() {
               </div>
             </div>
           )}
+          {heroTab === 'after' && (
+            <div className="absolute -top-3 -right-3 hidden md:flex bg-white border border-green-100 rounded-xl px-4 py-3 shadow-lg items-center gap-3 transition-all duration-300">
+              <div className="w-8 h-8 rounded-full bg-green-50 border border-green-100 flex items-center justify-center text-xs font-bold text-green-600">✓</div>
+              <div>
+                <p className="text-xs font-semibold text-gray-900">Garcia Electrical — approved</p>
+                <p className="text-[11px] text-gray-400">All documents verified</p>
+              </div>
+            </div>
+          )}
+          {heroTab === 'before' && (
+            <div className="absolute -bottom-4 -right-4 hidden md:flex bg-white border border-red-100 rounded-xl px-4 py-3 shadow-lg items-center gap-3 transition-all duration-300">
+              <div className="w-8 h-8 rounded-full bg-red-50 border border-red-100 flex items-center justify-center text-sm">🚨</div>
+              <div>
+                <p className="text-xs font-semibold text-gray-900">3 emails, still no COI</p>
+                <p className="text-[11px] text-gray-400">ABC Electric · waiting 6 days</p>
+              </div>
+            </div>
+          )}
+        </div>
+      </section>
+
+      {/* ── TRUST STRIP ── */}
+      <section className="bg-white border-y border-gray-100 py-5 px-6">
+        <div className="max-w-5xl mx-auto text-center space-y-1.5">
+          <p className="text-xs font-bold text-gray-400 uppercase tracking-widest">
+            Electrical · Plumbing · HVAC · Concrete · Demolition · Roofing
+          </p>
+          <p className="text-xs text-gray-400">
+            5 teams in active pilot · No credit card required · Live in under 10 minutes
+          </p>
         </div>
       </section>
 
@@ -320,7 +350,7 @@ export default function Home() {
                           <p className="text-xs text-gray-400">{v.note}</p>
                         </div>
                         <span className={`inline-flex items-center gap-1.5 text-[11px] font-semibold px-2.5 py-1 rounded-full ${cfg.badge}`}>
-                          <span className={`w-1.5 h-1.5 rounded-full ${cfg.dot}`} />
+                          <span className={`w-1.5 h-1.5 rounded-full ${cfg.dot} ${['expired', 'expiring'].includes(v.status) ? 'animate-pulse' : ''}`} />
                           {cfg.label}
                         </span>
                       </div>
@@ -392,7 +422,7 @@ export default function Home() {
                   return (
                     <div key={s.status} className="flex items-center gap-4 p-3.5 rounded-xl bg-[#fafaf9] border border-gray-100 hover:border-gray-200 hover:shadow-sm transition-all">
                       <span className={`inline-flex items-center gap-1.5 text-sm font-semibold px-4 py-2 rounded-full flex-shrink-0 ${cfg.badge}`}>
-                        <span className={`w-2 h-2 rounded-full ${cfg.dot}`} />
+                        <span className={`w-2 h-2 rounded-full ${cfg.dot} ${['expired', 'expiring'].includes(s.status) ? 'animate-pulse' : ''}`} />
                         {cfg.label}
                       </span>
                       <p className="text-sm text-gray-500">{s.desc}</p>
@@ -495,6 +525,20 @@ export default function Home() {
               <p className="text-lg text-gray-500 leading-relaxed">
                 A secure link. A clear checklist. Done in under 2 minutes from the job site.
               </p>
+              <div className="grid grid-cols-2 gap-3">
+                <div className="bg-red-50 border border-red-100 rounded-xl p-4 space-y-2">
+                  <p className="text-[11px] font-bold text-red-700 uppercase tracking-wide">Every other platform</p>
+                  {['Vendor creates account', 'Most never do', 'Doc never arrives', 'You chase them anyway'].map((step, i) => (
+                    <p key={i} className="text-xs text-red-600 flex items-start gap-1.5"><span className="text-red-400 mt-0.5">→</span>{step}</p>
+                  ))}
+                </div>
+                <div className="bg-green-50 border border-green-100 rounded-xl p-4 space-y-2">
+                  <p className="text-[11px] font-bold text-green-700 uppercase tracking-wide">VendorOS</p>
+                  {['Send a secure link', 'Vendor uploads in 2 min', 'You get notified', 'Done.'].map((step, i) => (
+                    <p key={i} className="text-xs text-green-700 flex items-start gap-1.5"><span className="text-green-500 mt-0.5">✓</span>{step}</p>
+                  ))}
+                </div>
+              </div>
               <div className="space-y-5 pt-2">
                 {[
                   { icon: '🔗', title: 'Secure upload link', desc: 'Sent via email or SMS — no password, no account creation ever' },
@@ -542,7 +586,7 @@ export default function Home() {
               ].map((alert) => (
                 <div key={alert.vendor} className={`flex items-center justify-between p-4 rounded-xl border ${alert.border} ${alert.bg} hover:shadow-sm transition-all`}>
                   <div className="flex items-center gap-3">
-                    <span className={`w-2 h-2 rounded-full flex-shrink-0 ${alert.dot}`} />
+                    <span className={`w-2 h-2 rounded-full flex-shrink-0 ${alert.dot} ${alert.days === 'Expired' || alert.days === '7 days' ? 'animate-pulse' : ''}`} />
                     <div>
                       <p className="text-sm font-semibold text-gray-900">{alert.vendor}</p>
                       <p className="text-xs text-gray-500">{alert.doc}</p>
@@ -628,6 +672,7 @@ export default function Home() {
               </form>
             )}
             {status === 'error' && <p className="text-sm text-red-400">{message}</p>}
+            <p className="text-sm text-gray-500">No credit card. No lengthy onboarding. Live in under 10 minutes.</p>
             <p className="text-sm text-gray-500 italic">Early access opening soon. Limited spots.</p>
           </div>
         </AnimateIn>
