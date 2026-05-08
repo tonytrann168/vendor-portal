@@ -33,7 +33,6 @@ export default function Home() {
   const [message, setMessage] = useState('')
   const [heroTab, setHeroTab] = useState<'before' | 'after'>('before')
 
-  // Auto-transition hero from chaos → clarity after 2.5s
   useEffect(() => {
     const t = setTimeout(() => setHeroTab('after'), 2500)
     return () => clearTimeout(t)
@@ -67,10 +66,10 @@ export default function Home() {
   const scrollTo = (id: string) => document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' })
 
   return (
-    <div className="bg-white text-gray-900 font-sans antialiased">
+    <div className="bg-[#fafaf9] text-gray-900 font-sans antialiased">
 
       {/* ── NAV ── */}
-      <nav className="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-gray-100">
+      <nav className="sticky top-0 z-50 bg-[#fafaf9]/90 backdrop-blur-md border-b border-gray-100">
         <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
           <span className="font-bold text-lg tracking-tight">VendorOS</span>
           <div className="hidden md:flex items-center gap-8 text-sm font-medium text-gray-500">
@@ -95,12 +94,12 @@ export default function Home() {
             Built for construction teams
           </div>
 
-          <h1 className="text-5xl md:text-[64px] font-extrabold tracking-tight leading-[1.04] text-gray-900">
-            Know instantly which vendors are approved, missing docs, or blocking your project.
+          <h1 className="text-5xl md:text-7xl font-extrabold tracking-tight leading-[1.0] text-gray-900">
+            Stop Chasing Vendor Documents Across Emails, Texts, and Spreadsheets.
           </h1>
 
           <p className="text-xl text-gray-500 leading-relaxed max-w-lg">
-            Automatically collect COIs, W-9s, licenses, and compliance documents — then track approvals, expirations, and status in one place.
+            Automatically collect COIs, W-9s, and compliance docs from every vendor — then see who&apos;s approved, who&apos;s blocking your project, and what expires next.
           </p>
 
           <div className="space-y-4">
@@ -116,7 +115,7 @@ export default function Home() {
                   required
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="px-4 py-3 rounded-xl border border-gray-200 text-sm focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 w-52 transition-all"
+                  className="px-4 py-3 rounded-xl border border-gray-200 bg-white text-sm focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 w-52 transition-all"
                   disabled={status === 'loading'}
                 />
                 <button
@@ -133,7 +132,7 @@ export default function Home() {
             <div className="flex gap-3">
               <button
                 onClick={() => scrollTo('how-it-works')}
-                className="px-5 py-3 rounded-xl border border-gray-200 text-sm font-semibold text-gray-600 hover:border-gray-300 hover:bg-gray-50 transition-all"
+                className="px-5 py-3 rounded-xl border border-gray-200 bg-white text-sm font-semibold text-gray-600 hover:border-gray-300 hover:bg-gray-50 transition-all"
               >
                 See How It Works →
               </button>
@@ -144,13 +143,13 @@ export default function Home() {
               <span className="flex items-center gap-1.5"><span className="text-green-500">✓</span> Mobile-friendly uploads</span>
               <span className="flex items-center gap-1.5"><span className="text-green-500">✓</span> Built for construction</span>
             </div>
+            <p className="text-xs text-gray-400">5 construction teams in active pilot · No credit card required</p>
           </div>
         </div>
 
         {/* Right — Before / After hero visual */}
         <div className="relative">
-          {/* Tab selector */}
-          <div className="flex rounded-xl border border-gray-200 p-1 mb-4 bg-gray-50 w-fit mx-auto">
+          <div className="flex rounded-xl border border-gray-200 p-1 mb-4 bg-white w-fit mx-auto">
             <button
               onClick={() => setHeroTab('before')}
               className={`px-4 py-2 rounded-lg text-xs font-semibold transition-all ${heroTab === 'before' ? 'bg-white text-red-600 shadow-sm border border-gray-100' : 'text-gray-400 hover:text-gray-600'}`}
@@ -239,7 +238,6 @@ export default function Home() {
             </div>
           </div>
 
-          {/* Floating alert */}
           {heroTab === 'after' && (
             <div className="absolute -bottom-4 -left-4 bg-white border border-gray-100 rounded-xl px-4 py-3 shadow-lg flex items-center gap-3 transition-all duration-300">
               <div className="w-8 h-8 rounded-full bg-amber-50 border border-amber-100 flex items-center justify-center text-sm">⚠️</div>
@@ -253,11 +251,14 @@ export default function Home() {
       </section>
 
       {/* ── THE WORKFLOW IS BROKEN — SPLIT SCREEN ── */}
-      <section className="bg-gray-50 border-y border-gray-100 py-28 px-6">
+      <section className="bg-white border-y border-gray-100 py-28 px-6">
         <div className="max-w-5xl mx-auto">
           <AnimateIn>
             <div className="text-center mb-16">
               <p className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-4">The Reality Today</p>
+              <p className="text-base font-semibold text-amber-600 mb-5">
+                The average construction PM spends 6+ hours per week on vendor compliance follow-up.
+              </p>
               <h2 className="text-4xl md:text-5xl font-extrabold tracking-tight text-gray-900">
                 The current workflow<br className="hidden md:block" /> is broken.
               </h2>
@@ -270,20 +271,20 @@ export default function Home() {
           <AnimateIn delay={100}>
             <div className="grid md:grid-cols-2 gap-6 items-start">
               {/* LEFT — chaos */}
-              <div className="bg-white rounded-2xl border border-red-100 shadow-sm overflow-hidden">
+              <div className="bg-[#fafaf9] rounded-2xl border border-red-100 shadow-sm overflow-hidden">
                 <div className="px-5 py-3 bg-red-50 border-b border-red-100 flex items-center gap-2">
                   <span className="w-2 h-2 rounded-full bg-red-400" />
                   <span className="text-xs font-bold text-red-700 uppercase tracking-wide">Your team&apos;s workflow today</span>
                 </div>
                 <div className="p-5 space-y-3">
                   {[
-                    { icon: '📧', text: '"Can you resend where to send the COI?" — 4th email this week', type: 'email' },
-                    { icon: '💬', text: '"Hey their insurance expired 3 weeks ago nobody caught it 🚨"', type: 'text' },
-                    { icon: '📊', text: 'Vendor_Tracking_FINAL_v4.xlsx — last updated 3 weeks ago', type: 'file' },
-                    { icon: '📱', text: '"Just text me the W-9, I\'ll send it to the right person"', type: 'text' },
-                    { icon: '📋', text: 'Approval stuck — PM waiting on COI that expired last month', type: 'blocked' },
+                    { icon: '📧', text: '"Can you resend where to send the COI?" — 4th email this week' },
+                    { icon: '💬', text: '"Hey their insurance expired 3 weeks ago nobody caught it 🚨"' },
+                    { icon: '📊', text: 'Vendor_Tracking_FINAL_v4.xlsx — last updated 3 weeks ago' },
+                    { icon: '📱', text: '"Just text me the W-9, I\'ll send it to the right person"' },
+                    { icon: '📋', text: 'Approval stuck — PM waiting on COI that expired last month' },
                   ].map((item, i) => (
-                    <div key={i} className="flex items-start gap-3 p-3 bg-gray-50 rounded-xl">
+                    <div key={i} className="flex items-start gap-3 p-3 bg-white rounded-xl border border-gray-100">
                       <span className="text-base mt-0.5">{item.icon}</span>
                       <p className="text-sm text-gray-600 leading-snug">{item.text}</p>
                     </div>
@@ -295,12 +296,12 @@ export default function Home() {
               </div>
 
               {/* RIGHT — organized */}
-              <div className="bg-white rounded-2xl border border-green-100 shadow-sm overflow-hidden">
+              <div className="bg-[#fafaf9] rounded-2xl border border-green-100 shadow-sm overflow-hidden">
                 <div className="px-5 py-3 bg-green-50 border-b border-green-100 flex items-center gap-2">
                   <span className="w-2 h-2 rounded-full bg-green-500" />
                   <span className="text-xs font-bold text-green-700 uppercase tracking-wide">With VendorOS</span>
                 </div>
-                <div className="divide-y divide-gray-50">
+                <div className="divide-y divide-gray-100">
                   {[
                     { name: 'Garcia Electrical', note: 'COI · W-9 · License on file', status: 'approved' as const },
                     { name: 'Martinez Plumbing', note: 'Reminder sent — renewing Jul 15', status: 'expiring' as const },
@@ -310,7 +311,7 @@ export default function Home() {
                   ].map((v) => {
                     const cfg = statusConfig[v.status]
                     return (
-                      <div key={v.name} className="flex items-center justify-between px-5 py-3.5 hover:bg-gray-50 transition-colors">
+                      <div key={v.name} className="flex items-center justify-between px-5 py-3.5 hover:bg-white transition-colors">
                         <div>
                           <p className="text-sm font-semibold text-gray-900">{v.name}</p>
                           <p className="text-xs text-gray-400">{v.note}</p>
@@ -365,7 +366,7 @@ export default function Home() {
       </section>
 
       {/* ── KNOW INSTANTLY ── */}
-      <section id="visibility" className="bg-gray-50 border-y border-gray-100 py-28 md:py-36 px-6">
+      <section id="visibility" className="bg-white border-y border-gray-100 py-28 md:py-36 px-6">
         <div className="max-w-5xl mx-auto grid md:grid-cols-2 gap-16 items-center">
           <AnimateIn>
             <div className="space-y-6">
@@ -374,35 +375,38 @@ export default function Home() {
                 Know instantly who&apos;s approved.
               </h2>
               <p className="text-xl text-gray-500 leading-relaxed">
-                No more digging through emails. Every vendor&apos;s compliance status is visible at a glance.
+                No more digging through emails. Every vendor&apos;s compliance status is visible at a glance — and every status means something actionable.
               </p>
-              <div className="space-y-2.5 pt-2">
+              <div className="space-y-3 pt-2">
                 {[
-                  { icon: '✅', label: 'Approved',      desc: 'All documents verified and current' },
-                  { icon: '⚠️', label: 'Expiring Soon', desc: 'COI or license renewal needed within 30 days' },
-                  { icon: '❌', label: 'Expired',        desc: 'Document lapsed — immediate action required' },
-                  { icon: '⏳', label: 'Pending Review', desc: 'Documents uploaded, awaiting your approval' },
-                  { icon: '🚫', label: 'Missing Docs',   desc: "Vendor hasn't submitted yet" },
-                ].map((s) => (
-                  <div key={s.label} className="flex items-center gap-4 p-3 rounded-xl bg-white border border-gray-100 hover:border-gray-200 hover:shadow-sm transition-all">
-                    <span className="text-base">{s.icon}</span>
-                    <div>
-                      <p className="text-sm font-semibold text-gray-900">{s.label}</p>
-                      <p className="text-xs text-gray-400">{s.desc}</p>
+                  { status: 'approved' as const, desc: 'All documents verified and current' },
+                  { status: 'expiring' as const, desc: 'COI or license renewal needed within 30 days' },
+                  { status: 'expired'  as const, desc: 'Document lapsed — immediate action required' },
+                  { status: 'pending'  as const, desc: 'Documents uploaded, awaiting your approval' },
+                  { status: 'missing'  as const, desc: "Vendor hasn't submitted yet" },
+                ].map((s) => {
+                  const cfg = statusConfig[s.status]
+                  return (
+                    <div key={s.status} className="flex items-center gap-4 p-3.5 rounded-xl bg-[#fafaf9] border border-gray-100 hover:border-gray-200 hover:shadow-sm transition-all">
+                      <span className={`inline-flex items-center gap-1.5 text-sm font-semibold px-4 py-2 rounded-full flex-shrink-0 ${cfg.badge}`}>
+                        <span className={`w-2 h-2 rounded-full ${cfg.dot}`} />
+                        {cfg.label}
+                      </span>
+                      <p className="text-sm text-gray-500">{s.desc}</p>
                     </div>
-                  </div>
-                ))}
+                  )
+                })}
               </div>
             </div>
           </AnimateIn>
 
           <AnimateIn delay={150}>
-            <div className="bg-white rounded-2xl border border-gray-100 shadow-[0_20px_60px_rgba(0,0,0,0.06)] overflow-hidden">
-              <div className="px-5 py-4 border-b border-gray-50 flex items-center justify-between">
+            <div className="bg-[#fafaf9] rounded-2xl border border-gray-100 shadow-[0_20px_60px_rgba(0,0,0,0.06)] overflow-hidden">
+              <div className="px-5 py-4 border-b border-gray-100 flex items-center justify-between bg-white">
                 <p className="text-sm font-semibold text-gray-900">Vendor Compliance</p>
                 <span className="text-xs text-gray-400">Updated just now</span>
               </div>
-              <div className="divide-y divide-gray-50">
+              <div className="divide-y divide-gray-100">
                 {[
                   { name: 'Garcia Electrical', docs: 'COI · W-9 · License',      status: 'approved' as const },
                   { name: 'Martinez Plumbing', docs: 'COI expires Jul 15',        status: 'expiring' as const },
@@ -414,9 +418,9 @@ export default function Home() {
                   const cfg = statusConfig[v.status]
                   const initials = v.name.split(' ').map((w) => w[0]).join('').slice(0, 2)
                   return (
-                    <div key={v.name} className="flex items-center justify-between px-5 py-3 hover:bg-gray-50 transition-colors group">
+                    <div key={v.name} className="flex items-center justify-between px-5 py-3 hover:bg-white transition-colors">
                       <div className="flex items-center gap-3">
-                        <div className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center text-xs font-bold text-gray-500">
+                        <div className="w-8 h-8 rounded-full bg-white border border-gray-200 flex items-center justify-center text-xs font-bold text-gray-500">
                           {initials}
                         </div>
                         <div>
@@ -480,10 +484,10 @@ export default function Home() {
             <div className="space-y-6">
               <p className="text-xs font-bold text-gray-400 uppercase tracking-widest">Vendor Experience</p>
               <h2 className="text-4xl md:text-5xl font-extrabold tracking-tight text-gray-900">
-                Vendors upload from their phone. No login required.
+                Your vendors are on job sites. We built for that.
               </h2>
               <p className="text-xl text-gray-500 leading-relaxed">
-                Construction vendors hate software. So we made it frictionless — a secure link, a clear checklist, and they&apos;re done in minutes from the job site.
+                A secure link. A clear checklist. Done in 2 minutes. No account, no app download, no friction.
               </p>
               <div className="space-y-5 pt-2">
                 {[
@@ -506,7 +510,7 @@ export default function Home() {
       </section>
 
       {/* ── EXPIRATION TRACKING ── */}
-      <section className="bg-gray-50 border-y border-gray-100 py-28 md:py-36 px-6">
+      <section className="bg-white border-y border-gray-100 py-28 md:py-36 px-6">
         <div className="max-w-4xl mx-auto">
           <AnimateIn>
             <div className="text-center mb-16 space-y-4">
@@ -515,7 +519,10 @@ export default function Home() {
                 Never get surprised<br className="hidden md:block" /> by an expired document again.
               </h2>
               <p className="text-xl text-gray-500 max-w-xl mx-auto leading-relaxed">
-                VendorOS tracks every expiration and sends automated reminders — so you stay ahead, not caught off guard at the worst moment.
+                Most construction teams find out about expired COIs after the damage is done — a lapsed policy discovered during an audit, or a vendor blocked mid-project.
+              </p>
+              <p className="text-lg text-gray-500 max-w-xl mx-auto leading-relaxed">
+                VendorOS tracks every expiration and sends automated reminders — so you stay ahead, not caught off guard.
               </p>
             </div>
           </AnimateIn>
@@ -561,9 +568,9 @@ export default function Home() {
           </AnimateIn>
           <div className="grid md:grid-cols-3 gap-8">
             {[
-              { icon: '🔔', title: 'Automated reminders',    desc: 'VendorOS nudges vendors when documents are missing or expiring. You stop being the messenger.' },
-              { icon: '📋', title: 'Compliance detection',   desc: 'Identifies document type on upload and validates required fields automatically.' },
-              { icon: '📊', title: 'Project-level visibility',desc: 'See compliance status across every vendor on every active project from one dashboard.' },
+              { icon: '🔔', title: 'Vendors get nudged automatically', desc: 'Reminders go out when documents are missing or expiring. You stop being the messenger.' },
+              { icon: '🏗️', title: 'Knows what to collect by trade',  desc: 'Electrical, plumbing, and concrete have different requirements. VendorOS tracks them separately.' },
+              { icon: '📊', title: 'One dashboard. Every project.',    desc: 'See compliance status across every vendor on every active project. Nothing falls through.' },
             ].map((f, i) => (
               <AnimateIn key={f.title} delay={i * 100}>
                 <div className="p-6 rounded-2xl border border-gray-100 bg-white hover:border-gray-200 hover:shadow-md transition-all">
@@ -582,10 +589,10 @@ export default function Home() {
         <AnimateIn>
           <div className="max-w-2xl mx-auto text-center space-y-8">
             <h2 className="text-4xl md:text-5xl font-extrabold tracking-tight text-white">
-              Finally, someone fixed<br className="hidden md:block" /> this nightmare.
+              Vendor compliance<br className="hidden md:block" /> shouldn&apos;t be a full-time job.
             </h2>
             <p className="text-xl text-gray-400 leading-relaxed">
-              Join construction teams getting early access to VendorOS. We&apos;re onboarding 5 pilot teams now — your feedback shapes the product.
+              Join construction teams replacing spreadsheets, inboxes, and manual follow-up with one clean workflow.
             </p>
             {status === 'success' ? (
               <div className="inline-flex items-center gap-2 px-6 py-4 bg-green-900/40 text-green-400 rounded-xl font-semibold border border-green-800 text-sm">
@@ -618,7 +625,7 @@ export default function Home() {
       </section>
 
       {/* ── FOOTER ── */}
-      <footer className="border-t border-gray-100 py-10 px-6 bg-white">
+      <footer className="border-t border-gray-100 py-10 px-6 bg-[#fafaf9]">
         <div className="max-w-5xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4 text-sm text-gray-400">
           <span className="font-semibold text-gray-600">VendorOS</span>
           <div className="flex gap-6">
