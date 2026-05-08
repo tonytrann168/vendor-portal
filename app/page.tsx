@@ -91,7 +91,7 @@ export default function Home() {
         <div className="space-y-8">
           <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-blue-50 text-blue-700 rounded-full text-xs font-semibold border border-blue-100 tracking-wide uppercase">
             <span className="w-1.5 h-1.5 rounded-full bg-blue-500" />
-            Built for construction teams
+            Construction vendor compliance, solved
           </div>
 
           <h1 className="text-5xl md:text-7xl font-extrabold tracking-tight leading-[1.0] text-gray-900">
@@ -99,7 +99,7 @@ export default function Home() {
           </h1>
 
           <p className="text-xl text-gray-500 leading-relaxed max-w-lg">
-            Automatically collect COIs, W-9s, and compliance docs from every vendor — then see who&apos;s approved, who&apos;s blocking your project, and what expires next.
+            COIs expire unnoticed. W-9s get buried in threads. Insurance lapses only get discovered at the worst moment. VendorOS gives your team instant visibility across every vendor — who&apos;s approved, who&apos;s blocking your project, and what&apos;s about to expire.
           </p>
 
           <div className="space-y-4">
@@ -195,7 +195,7 @@ export default function Home() {
                 </div>
               </div>
               <div className="px-4 py-3 border-t border-gray-50">
-                <p className="text-xs text-center text-gray-400 italic">You spend 4+ hours/week on this.</p>
+                <p className="text-xs text-center text-gray-400 italic">Sound familiar? This is how most teams manage compliance.</p>
               </div>
             </div>
 
@@ -255,15 +255,18 @@ export default function Home() {
         <div className="max-w-5xl mx-auto">
           <AnimateIn>
             <div className="text-center mb-16">
-              <p className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-4">The Reality Today</p>
-              <p className="text-base font-semibold text-amber-600 mb-5">
-                The average construction PM spends 6+ hours per week on vendor compliance follow-up.
-              </p>
+              <p className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-4">The Daily Headache</p>
+              <div className="inline-block px-5 py-3 bg-amber-50 border border-amber-100 rounded-2xl mb-5">
+                <p className="text-base font-bold text-amber-700">
+                  The average construction PM spends 6+ hours per week on vendor compliance follow-up.
+                </p>
+                <p className="text-sm text-amber-600 mt-0.5">That&apos;s a full workday — every single week — just chasing documents.</p>
+              </div>
               <h2 className="text-4xl md:text-5xl font-extrabold tracking-tight text-gray-900">
                 The current workflow<br className="hidden md:block" /> is broken.
               </h2>
               <p className="text-xl text-gray-500 mt-4 max-w-xl mx-auto">
-                Every construction team we talk to runs vendor compliance the same way: manually, reactively, and too late.
+                Every construction team we talk to runs vendor compliance the same way: manually, reactively, and always one step behind.
               </p>
             </div>
           </AnimateIn>
@@ -370,12 +373,12 @@ export default function Home() {
         <div className="max-w-5xl mx-auto grid md:grid-cols-2 gap-16 items-center">
           <AnimateIn>
             <div className="space-y-6">
-              <p className="text-xs font-bold text-gray-400 uppercase tracking-widest">Approval Visibility</p>
+              <p className="text-xs font-bold text-gray-400 uppercase tracking-widest">Operational Clarity</p>
               <h2 className="text-4xl md:text-5xl font-extrabold tracking-tight text-gray-900">
                 Know instantly who&apos;s approved.
               </h2>
               <p className="text-xl text-gray-500 leading-relaxed">
-                No more digging through emails. Every vendor&apos;s compliance status is visible at a glance — and every status means something actionable.
+                Right now, the only way to know who&apos;s compliant is to dig through emails and hope your spreadsheet is current. VendorOS replaces that with a single source of truth — every vendor, every status, always live.
               </p>
               <div className="space-y-3 pt-2">
                 {[
@@ -482,12 +485,15 @@ export default function Home() {
 
           <AnimateIn delay={150}>
             <div className="space-y-6">
-              <p className="text-xs font-bold text-gray-400 uppercase tracking-widest">Vendor Experience</p>
+              <p className="text-xs font-bold text-gray-400 uppercase tracking-widest">Zero Friction by Design</p>
               <h2 className="text-4xl md:text-5xl font-extrabold tracking-tight text-gray-900">
-                Your vendors are on job sites. We built for that.
+                Vendors Upload From Their Phone. No Login Required.
               </h2>
               <p className="text-xl text-gray-500 leading-relaxed">
-                A secure link. A clear checklist. Done in 2 minutes. No account, no app download, no friction.
+                Every other compliance platform requires vendors to create accounts. Most never do — and documents never get submitted. We removed that barrier entirely.
+              </p>
+              <p className="text-lg text-gray-500 leading-relaxed">
+                A secure link. A clear checklist. Done in under 2 minutes from the job site.
               </p>
               <div className="space-y-5 pt-2">
                 {[
@@ -514,15 +520,15 @@ export default function Home() {
         <div className="max-w-4xl mx-auto">
           <AnimateIn>
             <div className="text-center mb-16 space-y-4">
-              <p className="text-xs font-bold text-gray-400 uppercase tracking-widest">Expiration Tracking</p>
+              <p className="text-xs font-bold text-gray-400 uppercase tracking-widest">Proactive Compliance</p>
               <h2 className="text-4xl md:text-5xl font-extrabold tracking-tight text-gray-900">
-                Never get surprised<br className="hidden md:block" /> by an expired document again.
+                Never get caught with an expired document again.
               </h2>
               <p className="text-xl text-gray-500 max-w-xl mx-auto leading-relaxed">
-                Most construction teams find out about expired COIs after the damage is done — a lapsed policy discovered during an audit, or a vendor blocked mid-project.
+                The typical story: a lapsed COI surfaces during an audit, or a vendor gets pulled off a project because nobody caught the expiration. By then, it&apos;s already a problem.
               </p>
               <p className="text-lg text-gray-500 max-w-xl mx-auto leading-relaxed">
-                VendorOS tracks every expiration and sends automated reminders — so you stay ahead, not caught off guard.
+                VendorOS tracks every document expiration and sends reminders automatically — to you and to the vendor — at 30, 14, and 7 days out.
               </p>
             </div>
           </AnimateIn>
@@ -560,7 +566,7 @@ export default function Home() {
         <div className="max-w-4xl mx-auto">
           <AnimateIn>
             <div className="text-center mb-16">
-              <p className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-4">Workflow Automation</p>
+              <p className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-4">Works While You Sleep</p>
               <h2 className="text-4xl md:text-5xl font-extrabold tracking-tight text-gray-900">
                 Less chasing.<br className="hidden md:block" /> More operational control.
               </h2>
@@ -593,6 +599,9 @@ export default function Home() {
             </h2>
             <p className="text-xl text-gray-400 leading-relaxed">
               Join construction teams replacing spreadsheets, inboxes, and manual follow-up with one clean workflow.
+            </p>
+            <p className="text-base text-gray-500">
+              Teams in our pilot stopped chasing vendors within the first week.
             </p>
             {status === 'success' ? (
               <div className="inline-flex items-center gap-2 px-6 py-4 bg-green-900/40 text-green-400 rounded-xl font-semibold border border-green-800 text-sm">
