@@ -1,330 +1,536 @@
-'use client';
+'use client'
 
-import { useState } from 'react';
-import * as gtag from '@/lib/gtag';
+import { useState } from 'react'
+import * as gtag from '@/lib/gtag'
+
+const heroVendors = [
+  { name: 'Garcia Electrical', trade: 'Electrical', status: 'approved' as const },
+  { name: 'Martinez Plumbing', trade: 'Plumbing', status: 'expiring' as const },
+  { name: 'Superior HVAC', trade: 'HVAC', status: 'expired' as const },
+  { name: 'Pacific Demo Co.', trade: 'Demolition', status: 'pending' as const },
+  { name: 'Quick Concrete', trade: 'Concrete', status: 'missing' as const },
+]
+
+const statusConfig = {
+  approved: { label: 'Approved', badge: 'bg-green-50 text-green-700 border border-green-100', dot: 'bg-green-500' },
+  expiring: { label: 'COI Expiring', badge: 'bg-amber-50 text-amber-700 border border-amber-100', dot: 'bg-amber-400' },
+  expired:  { label: 'Expired',      badge: 'bg-red-50 text-red-700 border border-red-100',     dot: 'bg-red-500'   },
+  pending:  { label: 'Pending Review',badge: 'bg-blue-50 text-blue-700 border border-blue-100',  dot: 'bg-blue-400'  },
+  missing:  { label: 'Missing Docs', badge: 'bg-orange-50 text-orange-700 border border-orange-100', dot: 'bg-orange-500' },
+}
 
 export default function Home() {
-  const [email, setEmail] = useState('');
-  const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
-  const [message, setMessage] = useState('');
+  const [email, setEmail] = useState('')
+  const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle')
+  const [message, setMessage] = useState('')
 
-  const handleSubmit = async (e: React.FormEvent, label: string = 'hero_form') => {
-    e.preventDefault();
-    setStatus('loading');
-
-    gtag.event({
-      action: 'submit_waitlist',
-      category: 'engagement',
-      label: label,
-    });
-
+  const handleSubmit = async (e: React.FormEvent, label = 'hero_form') => {
+    e.preventDefault()
+    setStatus('loading')
+    gtag.event({ action: 'submit_waitlist', category: 'engagement', label })
     try {
       const res = await fetch('/api/waitlist', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email }),
-      });
-
-      const data = await res.json();
-
+      })
+      const data = await res.json()
       if (res.ok) {
-        setStatus('success');
-        setEmail('');
-        gtag.event({
-          action: 'waitlist_success',
-          category: 'conversion',
-          label: label,
-        });
+        setStatus('success')
+        setEmail('')
+        gtag.event({ action: 'waitlist_success', category: 'conversion', label })
       } else {
-        setStatus('error');
-        setMessage(data.error || 'Something went wrong');
+        setStatus('error')
+        setMessage(data.error || 'Something went wrong')
       }
     } catch {
-      setStatus('error');
-      setMessage('Failed to connect to the server');
+      setStatus('error')
+      setMessage('Failed to connect. Try again.')
     }
-  };
+  }
+
+  const scrollTo = (id: string) => document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' })
 
   return (
-    <div className="flex flex-col min-h-screen bg-background text-foreground font-sans antialiased">
-      {/* Hero Section */}
-      <header className="px-6 py-16 md:py-28 max-w-6xl mx-auto w-full text-center md:text-left flex flex-col md:flex-row items-center gap-16">
-        <div className="flex-1 space-y-8">
-          <div className="inline-block px-4 py-1.5 bg-accent-soft text-accent rounded-full font-bold text-xs tracking-wider uppercase">
-            Built for Construction & Property Teams
+    <div className="bg-white text-gray-900 font-sans antialiased">
+
+      {/* ── NAV ── */}
+      <nav className="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-gray-100">
+        <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
+          <span className="font-bold text-lg tracking-tight">VendorOS</span>
+          <div className="hidden md:flex items-center gap-8 text-sm font-medium text-gray-500">
+            <button onClick={() => scrollTo('how-it-works')} className="hover:text-gray-900 transition-colors">How It Works</button>
+            <button onClick={() => scrollTo('visibility')} className="hover:text-gray-900 transition-colors">Product</button>
+            <button
+              onClick={() => scrollTo('waitlist')}
+              className="bg-gray-900 text-white px-4 py-2 rounded-lg text-sm font-semibold hover:bg-gray-700 transition-colors"
+            >
+              Request Access
+            </button>
           </div>
-          <h1 className="text-4xl md:text-6xl font-extrabold tracking-tight leading-tight">
-            Stop chasing vendor documents at 7PM
+        </div>
+      </nav>
+
+      {/* ── HERO ── */}
+      <section className="max-w-6xl mx-auto px-6 py-20 md:py-32 grid md:grid-cols-2 gap-16 items-center">
+        {/* Left */}
+        <div className="space-y-8">
+          <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-blue-50 text-blue-700 rounded-full text-xs font-semibold border border-blue-100 tracking-wide uppercase">
+            <span className="w-1.5 h-1.5 rounded-full bg-blue-500" />
+            Built for construction teams
+          </div>
+
+          <h1 className="text-5xl md:text-6xl font-extrabold tracking-tight leading-[1.05] text-gray-900">
+            Stop chasing vendor documents across emails, texts, and spreadsheets.
           </h1>
-          <p className="text-xl md:text-2xl text-text-muted max-w-2xl leading-relaxed">
-            VendorOS brings every vendor, every document, and every deadline into one place—so your team stops chasing and starts building.
+
+          <p className="text-xl text-gray-500 leading-relaxed max-w-xl">
+            Automatically collect COIs, W-9s, licenses, and compliance documents from vendors — then track approvals, expirations, and status in one place.
           </p>
-          <div className="w-full max-w-md pt-4">
+
+          <div className="flex flex-col sm:flex-row gap-3 pt-2">
             {status === 'success' ? (
-              <div className="bg-green-50 text-green-700 p-6 rounded-xl font-semibold border border-green-200 shadow-sm animate-in fade-in zoom-in duration-300">
-                ✓ You&apos;re on the list! We&apos;ll be in touch soon.
+              <div className="inline-flex items-center gap-2 px-5 py-3 bg-green-50 text-green-700 rounded-xl font-semibold border border-green-100 text-sm">
+                ✓ You&apos;re on the list — we&apos;ll be in touch.
               </div>
             ) : (
-              <div className="space-y-4">
-                <form onSubmit={(e) => handleSubmit(e, 'hero_form')} className="flex flex-col sm:flex-row gap-3">
+              <>
+                <form onSubmit={(e) => handleSubmit(e, 'hero_form')} className="flex gap-3">
                   <input
                     type="email"
-                    placeholder="Enter your work email"
+                    placeholder="Work email"
                     required
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    className="flex-1 px-5 py-4 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-accent transition-all text-lg shadow-sm"
+                    className="px-4 py-3 rounded-xl border border-gray-200 text-sm focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 w-52 transition-all"
                     disabled={status === 'loading'}
                   />
                   <button
                     type="submit"
                     disabled={status === 'loading'}
-                    className="bg-accent text-white px-8 py-4 rounded-xl font-bold text-lg hover:bg-blue-600 transition-all hover:scale-[1.02] active:scale-[0.98] shadow-md disabled:opacity-50"
+                    className="bg-gray-900 text-white px-5 py-3 rounded-xl font-semibold text-sm hover:bg-gray-700 transition-all disabled:opacity-50 whitespace-nowrap"
                   >
-                    {status === 'loading' ? 'Joining...' : 'Join the Waitlist'}
+                    {status === 'loading' ? 'Sending...' : 'Request Early Access'}
                   </button>
                 </form>
-                <p className="text-sm text-text-muted text-center md:text-left pl-1">
-                  Used by teams who are tired of chasing vendors through email, text, and spreadsheets.
-                </p>
-              </div>
+                <button
+                  onClick={() => scrollTo('how-it-works')}
+                  className="px-5 py-3 rounded-xl border border-gray-200 text-sm font-semibold text-gray-600 hover:border-gray-300 hover:bg-gray-50 transition-all"
+                >
+                  See How It Works →
+                </button>
+              </>
             )}
-            {status === 'error' && (
-              <p className="mt-3 text-red-600 text-sm font-medium bg-red-50 p-3 rounded-lg border border-red-100">{message}</p>
-            )}
+          </div>
+          {status === 'error' && <p className="text-sm text-red-600">{message}</p>}
+
+          <div className="flex flex-wrap gap-x-6 gap-y-2 text-sm text-gray-400">
+            <span className="flex items-center gap-1.5"><span className="text-green-500">✓</span> No login required for vendors</span>
+            <span className="flex items-center gap-1.5"><span className="text-green-500">✓</span> Mobile-friendly uploads</span>
+            <span className="flex items-center gap-1.5"><span className="text-green-500">✓</span> Built for construction</span>
           </div>
         </div>
 
-        {/* Product Mockup Preview */}
-        <div className="flex-1 w-full max-w-md bg-white border border-gray-100 rounded-3xl p-6 shadow-[0_20px_50px_rgba(0,0,0,0.08)] relative overflow-hidden group">
-          <div className="absolute top-0 left-0 w-full h-1.5 bg-accent"></div>
-          <div className="space-y-6">
-            <div className="flex items-center justify-between border-b border-gray-50 pb-4">
-              <div className="h-5 w-32 bg-gray-100 rounded-md"></div>
-              <div className="h-8 w-20 bg-accent-soft text-accent rounded-full text-xs flex items-center justify-center font-bold">Active</div>
+        {/* Right — Dashboard Mockup */}
+        <div className="relative">
+          <div className="bg-white rounded-2xl border border-gray-100 shadow-[0_20px_60px_rgba(0,0,0,0.06)] p-5">
+            <div className="flex items-center justify-between mb-5 pb-4 border-b border-gray-50">
+              <div>
+                <p className="text-[11px] text-gray-400 uppercase tracking-wider font-semibold mb-0.5">Active Project</p>
+                <p className="font-semibold text-gray-900 text-sm">Riverside Commercial — Phase 2</p>
+              </div>
+              <span className="text-xs bg-gray-50 text-gray-600 px-3 py-1.5 rounded-full font-medium border border-gray-100">
+                12 vendors
+              </span>
             </div>
-
-            <div className="space-y-4">
-              <div className="flex items-center gap-4 p-3 rounded-xl border border-gray-50 bg-gray-50/30">
-                <div className="h-10 w-10 rounded-lg bg-white shadow-sm flex items-center justify-center">📄</div>
-                <div className="flex-1 space-y-1.5">
-                  <div className="h-3.5 w-3/4 bg-gray-200 rounded"></div>
-                  <div className="h-2.5 w-1/2 bg-gray-100 rounded"></div>
-                </div>
-                <div className="px-2.5 py-1 bg-red-50 text-red-600 rounded-full text-[10px] font-bold border border-red-100">MISSING</div>
-              </div>
-
-              <div className="flex items-center gap-4 p-3 rounded-xl border border-gray-50">
-                <div className="h-10 w-10 rounded-lg bg-white shadow-sm flex items-center justify-center">🏢</div>
-                <div className="flex-1 space-y-1.5">
-                  <div className="h-3.5 w-2/3 bg-gray-200 rounded"></div>
-                  <div className="h-2.5 w-1/3 bg-gray-100 rounded"></div>
-                </div>
-                <div className="px-2.5 py-1 bg-green-50 text-green-600 rounded-full text-[10px] font-bold border border-green-100">VERIFIED</div>
-              </div>
-
-              <div className="flex items-center gap-4 p-3 rounded-xl border border-gray-50">
-                <div className="h-10 w-10 rounded-lg bg-white shadow-sm flex items-center justify-center">📝</div>
-                <div className="flex-1 space-y-1.5">
-                  <div className="h-3.5 w-1/2 bg-gray-200 rounded"></div>
-                  <div className="h-2.5 w-1/4 bg-gray-100 rounded"></div>
-                </div>
-                <div className="px-2.5 py-1 bg-yellow-50 text-yellow-600 rounded-full text-[10px] font-bold border border-yellow-100">EXPIRED</div>
-              </div>
+            <div className="space-y-2">
+              {heroVendors.map((v) => {
+                const cfg = statusConfig[v.status]
+                const initials = v.name.split(' ').map((w) => w[0]).join('').slice(0, 2)
+                return (
+                  <div key={v.name} className="flex items-center justify-between px-3 py-2.5 rounded-xl bg-gray-50 hover:bg-gray-100/80 transition-colors">
+                    <div className="flex items-center gap-3">
+                      <div className="w-8 h-8 rounded-full bg-white border border-gray-200 flex items-center justify-center text-xs font-bold text-gray-600 shadow-sm">
+                        {initials}
+                      </div>
+                      <div>
+                        <p className="text-sm font-medium text-gray-900 leading-none mb-0.5">{v.name}</p>
+                        <p className="text-xs text-gray-400">{v.trade}</p>
+                      </div>
+                    </div>
+                    <span className={`inline-flex items-center gap-1.5 text-[11px] font-semibold px-2.5 py-1 rounded-full ${cfg.badge}`}>
+                      <span className={`w-1.5 h-1.5 rounded-full ${cfg.dot}`} />
+                      {cfg.label}
+                    </span>
+                  </div>
+                )
+              })}
             </div>
-
-            <div className="pt-2">
-              <button className="w-full h-12 bg-accent text-white rounded-xl text-sm font-bold shadow-sm hover:shadow-md transition-all">
-                Send Automatic Reminders
+            <div className="mt-4 pt-4 border-t border-gray-50 flex items-center justify-between">
+              <span className="text-xs text-gray-400">2 vendors need attention</span>
+              <button className="text-xs font-semibold text-blue-600 hover:text-blue-700 transition-colors">
+                Send Reminders →
               </button>
             </div>
           </div>
-
-          {/* Floating UI Element */}
-          <div className="absolute -bottom-4 -right-4 bg-white p-4 rounded-2xl shadow-xl border border-gray-50 animate-bounce-slow">
-            <div className="flex items-center gap-3">
-              <div className="w-8 h-8 rounded-full bg-green-500 flex items-center justify-center text-white text-xs">✓</div>
-              <div className="text-xs font-bold">New Document Uploaded</div>
+          {/* Floating alert */}
+          <div className="absolute -bottom-4 -left-4 bg-white border border-gray-100 rounded-xl px-4 py-3 shadow-lg flex items-center gap-3">
+            <div className="w-8 h-8 rounded-full bg-amber-50 border border-amber-100 flex items-center justify-center text-sm">⚠️</div>
+            <div>
+              <p className="text-xs font-semibold text-gray-900">COI expires in 7 days</p>
+              <p className="text-[11px] text-gray-400">Martinez Plumbing</p>
             </div>
           </div>
         </div>
-      </header>
+      </section>
 
-      {/* Pain Recognition Section */}
-      <section className="bg-gray-50/50 py-24 px-6 border-y border-gray-100">
+      {/* ── PAIN SECTION ── */}
+      <section className="bg-gray-50 border-y border-gray-100 py-24 px-6">
         <div className="max-w-5xl mx-auto">
-          <div className="text-center mb-16 space-y-4">
-            <h2 className="text-3xl md:text-4xl font-bold text-foreground tracking-tight">Paperwork shouldn&apos;t hold up production.</h2>
-            <p className="text-lg text-text-muted max-w-2xl mx-auto">Managing vendors manually is slow, risky, and expensive.</p>
+          <div className="text-center mb-16">
+            <p className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-4">The Reality Today</p>
+            <h2 className="text-4xl md:text-5xl font-extrabold tracking-tight text-gray-900">
+              Vendor compliance is held together<br className="hidden md:block" /> by duct tape and prayers.
+            </h2>
           </div>
-          <div className="grid md:grid-cols-3 gap-8">
+          <div className="grid md:grid-cols-3 gap-6">
             {[
               {
-                title: "Vendors forget to send documents",
-                desc: "You're 2 days from project start. Still waiting on that W-9. You send another email. No response. Now you're rescheduling.",
-                icon: "📧"
+                scenario: '"Still waiting on their COI. Project starts Monday."',
+                detail: "You've sent 4 emails. No response. You're about to start a project with an unverified vendor.",
+                label: 'EMAIL CHASE',
+                border: 'border-red-100',
+                labelColor: 'text-red-500',
               },
               {
-                title: "Your PM spends hours chasing paperwork",
-                desc: "Email. Text. Slack. Drive. You're not building—you're chasing. And your PM should be managing the project, not hunting down documents.",
-                icon: "📱"
+                scenario: '"Where do I send the W-9? Just text me the email."',
+                detail: "Vendors don't know where to send things. Documents scatter across inboxes, texts, and Google Drives.",
+                label: 'DOCUMENT CHAOS',
+                border: 'border-orange-100',
+                labelColor: 'text-orange-500',
               },
               {
-                title: "Missing docs delay everything",
-                desc: "One expired insurance cert. One missing signed contract. That's all it takes to halt a project and cost you relationships.",
-                icon: "⚠️"
-              }
-            ].map((item, i) => (
-              <div key={i} className="bg-white p-8 rounded-2xl shadow-sm border border-gray-100 hover:border-accent/20 transition-colors">
-                <div className="text-3xl mb-4">{item.icon}</div>
-                <h3 className="font-bold text-lg mb-3">{item.title}</h3>
-                <p className="text-text-muted text-sm leading-relaxed">{item.desc}</p>
+                scenario: '"Their insurance expired 3 weeks ago. Nobody caught it."',
+                detail: "A field audit reveals an expired certificate. The vendor was on-site the whole time. Now you're exposed.",
+                label: 'COMPLIANCE RISK',
+                border: 'border-amber-100',
+                labelColor: 'text-amber-600',
+              },
+            ].map((item) => (
+              <div key={item.label} className={`bg-white rounded-2xl p-6 border ${item.border} shadow-sm`}>
+                <p className={`text-[10px] font-bold uppercase tracking-widest mb-4 ${item.labelColor}`}>{item.label}</p>
+                <p className="text-base font-semibold text-gray-900 mb-3 leading-snug">{item.scenario}</p>
+                <p className="text-sm text-gray-500 leading-relaxed">{item.detail}</p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Workflow Section */}
-      <section className="py-28 px-6 max-w-5xl mx-auto w-full">
-        <div className="text-center mb-20 space-y-4">
-          <h2 className="text-3xl md:text-4xl font-extrabold tracking-tight">The 4-Step Automation</h2>
-          <p className="text-lg text-text-muted">How VendorOS fixes your document chaos.</p>
-        </div>
-        <div className="grid md:grid-cols-2 gap-x-16 gap-y-12">
-          {[
-            {
-              step: "01",
-              title: "Invite your vendor",
-              desc: "Send one link. No more email chains."
-            },
-            {
-              step: "02",
-              title: "They upload their documents",
-              desc: "Vendors upload directly. No chasing."
-            },
-            {
-              step: "03",
-              title: "You review and approve",
-              desc: "See everything in one dashboard. Approve with one click."
-            },
-            {
-              step: "04",
-              title: "Automatic reminders",
-              desc: "System nudges vendors (and you) when something's missing or expiring."
-            }
-          ].map((item) => (
-            <div key={item.step} className="flex gap-6 items-start group">
-              <div className="flex-shrink-0 w-12 h-12 bg-accent-soft text-accent rounded-2xl flex items-center justify-center font-black text-lg group-hover:bg-accent group-hover:text-white transition-colors">
-                {item.step}
+      {/* ── HOW IT WORKS ── */}
+      <section id="how-it-works" className="py-24 px-6">
+        <div className="max-w-4xl mx-auto">
+          <div className="text-center mb-16">
+            <p className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-4">How It Works</p>
+            <h2 className="text-4xl md:text-5xl font-extrabold tracking-tight text-gray-900">
+              Three steps to vendor clarity.
+            </h2>
+          </div>
+          <div className="grid md:grid-cols-3 gap-12">
+            {[
+              {
+                n: '1',
+                title: 'Invite your vendor',
+                desc: 'Send a secure link via email or SMS. No account creation. No app downloads. Just a link.',
+                note: 'Works from any phone or computer',
+              },
+              {
+                n: '2',
+                title: 'Vendor uploads their docs',
+                desc: "They see exactly what's needed. Upload directly from their phone or desktop in under 2 minutes.",
+                note: 'COIs, W-9s, licenses, and more',
+              },
+              {
+                n: '3',
+                title: 'You review and approve',
+                desc: 'Everything lands in your dashboard. One-click approve, request revisions, or flag for follow-up.',
+                note: 'Full audit trail included',
+              },
+            ].map((step) => (
+              <div key={step.n} className="text-center">
+                <div className="w-12 h-12 rounded-2xl bg-gray-900 text-white flex items-center justify-center font-black text-lg mx-auto mb-6">
+                  {step.n}
+                </div>
+                <h3 className="font-bold text-lg mb-3 text-gray-900">{step.title}</h3>
+                <p className="text-gray-500 text-sm leading-relaxed mb-3">{step.desc}</p>
+                <p className="text-xs text-gray-400 font-medium">{step.note}</p>
               </div>
-              <div className="space-y-2">
-                <h3 className="text-xl font-extrabold">{item.title}</h3>
-                <p className="text-text-muted leading-relaxed">{item.desc}</p>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── KNOW INSTANTLY ── */}
+      <section id="visibility" className="bg-gray-50 border-y border-gray-100 py-24 px-6">
+        <div className="max-w-5xl mx-auto grid md:grid-cols-2 gap-16 items-center">
+          <div className="space-y-6">
+            <p className="text-xs font-bold text-gray-400 uppercase tracking-widest">Approval Visibility</p>
+            <h2 className="text-4xl md:text-5xl font-extrabold tracking-tight text-gray-900">
+              Know instantly who&apos;s approved.
+            </h2>
+            <p className="text-xl text-gray-500 leading-relaxed">
+              No more digging through emails. Every vendor&apos;s compliance status is visible at a glance — approved, expiring, expired, or missing.
+            </p>
+            <div className="space-y-2.5 pt-2">
+              {[
+                { icon: '✅', label: 'Approved', desc: 'All documents verified and current' },
+                { icon: '⚠️', label: 'Expiring Soon', desc: 'COI or license renewal needed within 30 days' },
+                { icon: '❌', label: 'Expired', desc: 'Document lapsed — immediate action required' },
+                { icon: '⏳', label: 'Pending Review', desc: 'Documents uploaded, awaiting your approval' },
+                { icon: '🚫', label: 'Missing Docs', desc: "Vendor hasn't submitted yet" },
+              ].map((s) => (
+                <div key={s.label} className="flex items-center gap-4 p-3 rounded-xl bg-white border border-gray-100">
+                  <span className="text-base">{s.icon}</span>
+                  <div>
+                    <p className="text-sm font-semibold text-gray-900">{s.label}</p>
+                    <p className="text-xs text-gray-400">{s.desc}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Status mockup */}
+          <div className="bg-white rounded-2xl border border-gray-100 shadow-[0_20px_60px_rgba(0,0,0,0.06)] overflow-hidden">
+            <div className="px-5 py-4 border-b border-gray-50 flex items-center justify-between">
+              <p className="text-sm font-semibold text-gray-900">Vendor Compliance</p>
+              <span className="text-xs text-gray-400">Updated just now</span>
+            </div>
+            <div className="divide-y divide-gray-50">
+              {[
+                { name: 'Garcia Electrical', docs: 'COI · W-9 · License', status: 'approved' as const },
+                { name: 'Martinez Plumbing', docs: 'COI expires Jul 15', status: 'expiring' as const },
+                { name: 'Superior HVAC', docs: 'Insurance expired Jun 1', status: 'expired' as const },
+                { name: 'Pacific Demo Co.', docs: 'W-9 under review', status: 'pending' as const },
+                { name: 'Quick Concrete LLC', docs: 'Missing: COI + W-9', status: 'missing' as const },
+                { name: 'Apex Roofing', docs: 'COI · W-9 · License', status: 'approved' as const },
+              ].map((v) => {
+                const cfg = statusConfig[v.status]
+                const initials = v.name.split(' ').map((w) => w[0]).join('').slice(0, 2)
+                return (
+                  <div key={v.name} className="flex items-center justify-between px-5 py-3 hover:bg-gray-50 transition-colors">
+                    <div className="flex items-center gap-3">
+                      <div className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center text-xs font-bold text-gray-500">
+                        {initials}
+                      </div>
+                      <div>
+                        <p className="text-sm font-medium text-gray-900">{v.name}</p>
+                        <p className="text-xs text-gray-400">{v.docs}</p>
+                      </div>
+                    </div>
+                    <span className={`inline-flex items-center gap-1.5 text-[11px] font-semibold px-2.5 py-1 rounded-full ${cfg.badge}`}>
+                      <span className={`w-1.5 h-1.5 rounded-full ${cfg.dot}`} />
+                      {cfg.label}
+                    </span>
+                  </div>
+                )
+              })}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ── NO ACCOUNT NEEDED ── */}
+      <section className="py-24 px-6">
+        <div className="max-w-5xl mx-auto grid md:grid-cols-2 gap-16 items-center">
+          {/* Phone mockup */}
+          <div className="flex justify-center">
+            <div className="bg-gray-900 rounded-[2.5rem] p-3 shadow-2xl w-[260px]">
+              <div className="bg-white rounded-[2rem] overflow-hidden">
+                <div className="bg-gray-900 h-6 flex items-center justify-center">
+                  <div className="w-16 h-1.5 bg-gray-700 rounded-full" />
+                </div>
+                <div className="p-5 space-y-4">
+                  <div>
+                    <p className="text-[11px] text-gray-400 mb-0.5">From: Riverside Commercial</p>
+                    <p className="text-sm font-semibold text-gray-900 leading-snug">Upload your compliance documents</p>
+                  </div>
+                  <div className="space-y-2">
+                    <div className="flex items-center justify-between p-3 bg-green-50 rounded-xl border border-green-100">
+                      <span className="text-xs font-medium text-green-800">Certificate of Insurance</span>
+                      <span className="text-xs text-green-600 font-bold">✓</span>
+                    </div>
+                    <div className="flex items-center justify-between p-3 bg-blue-50 rounded-xl border border-blue-100">
+                      <span className="text-xs font-medium text-blue-800">W-9 Form</span>
+                      <span className="text-xs text-blue-600 font-bold">↑ Upload</span>
+                    </div>
+                    <div className="flex items-center justify-between p-3 bg-gray-50 rounded-xl border border-gray-100">
+                      <span className="text-xs font-medium text-gray-500">Business License</span>
+                      <span className="text-xs text-gray-400">Pending</span>
+                    </div>
+                  </div>
+                  <button className="w-full bg-blue-600 text-white py-2.5 rounded-xl text-xs font-bold">
+                    Upload W-9 →
+                  </button>
+                  <p className="text-[10px] text-center text-gray-400">No account required · Encrypted</p>
+                </div>
               </div>
             </div>
-          ))}
-        </div>
-        <div className="mt-16 text-center">
-          <button
-            onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-            className="bg-accent text-white px-10 py-4 rounded-xl font-bold text-xl hover:bg-blue-600 transition-all shadow-md"
-          >
-            Join the Waitlist
-          </button>
-        </div>
-      </section>
+          </div>
 
-      {/* Value Proposition / Outcome Section */}
-      <section className="bg-accent py-24 px-6 relative overflow-hidden">
-        <div className="absolute top-0 right-0 w-64 h-64 bg-blue-400/20 rounded-full -mr-32 -mt-32"></div>
-        <div className="absolute bottom-0 left-0 w-64 h-64 bg-blue-400/20 rounded-full -ml-32 -mb-32"></div>
-        <div className="max-w-6xl mx-auto grid md:grid-cols-3 gap-12 text-center relative z-10">
-          <div className="space-y-2">
-            <div className="text-5xl font-black text-white mb-2">5+</div>
-            <div className="text-blue-50 font-bold uppercase tracking-widest text-xs">Save 5+ hours per week</div>
-            <p className="text-blue-100/80 text-sm">No more &quot;just checking in&quot; emails. No more tracking documents in 5 different places.</p>
-          </div>
-          <div className="space-y-2">
-            <div className="text-5xl font-black text-white mb-2">100%</div>
-            <div className="text-blue-50 font-bold uppercase tracking-widest text-xs">Reduce compliance risk</div>
-            <p className="text-blue-100/80 text-sm">Never miss an expiration date. Never start a project with expired insurance.</p>
-          </div>
-          <div className="space-y-2">
-            <div className="text-5xl font-black text-white mb-2">One</div>
-            <div className="text-blue-50 font-bold uppercase tracking-widest text-xs">Centralize everything</div>
-            <p className="text-blue-100/80 text-sm">Every vendor. Every document. Every deadline. One place.</p>
+          <div className="space-y-6">
+            <p className="text-xs font-bold text-gray-400 uppercase tracking-widest">Vendor Experience</p>
+            <h2 className="text-4xl md:text-5xl font-extrabold tracking-tight text-gray-900">
+              Vendors upload without creating an account.
+            </h2>
+            <p className="text-xl text-gray-500 leading-relaxed">
+              Construction vendors hate software. So we made it frictionless. They get a secure link, see exactly what&apos;s needed, and upload from their phone in minutes.
+            </p>
+            <div className="space-y-5 pt-2">
+              {[
+                { icon: '🔗', title: 'Secure upload link', desc: 'Sent via email or SMS — no password, no account creation' },
+                { icon: '📱', title: 'Works on any phone', desc: 'Take a photo of a document and upload instantly from the field' },
+                { icon: '✅', title: 'Clear checklist', desc: 'Vendors see exactly what is missing — nothing more, nothing less' },
+              ].map((f) => (
+                <div key={f.title} className="flex gap-4">
+                  <span className="text-xl mt-0.5">{f.icon}</span>
+                  <div>
+                    <p className="font-semibold text-gray-900 text-sm mb-0.5">{f.title}</p>
+                    <p className="text-sm text-gray-500">{f.desc}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </section>
 
-      {/* Scarcity / Early Access Section */}
-      <section className="py-28 px-6 text-center max-w-4xl mx-auto">
-        <div className="bg-accent-soft/50 rounded-3xl p-12 border border-accent/10">
-          <h2 className="text-3xl md:text-4xl font-extrabold mb-6">Looking for pilot users</h2>
-          <p className="text-xl text-text-muted mb-10 leading-relaxed max-w-2xl mx-auto">
-            We&apos;re giving 5 construction teams early access—and a discount on launch pricing.
-          </p>
-          <div className="flex flex-col items-center gap-6">
-            <button
-              onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-              className="bg-accent text-white px-10 py-4 rounded-xl font-bold text-lg hover:bg-blue-600 transition-all shadow-md"
-            >
-              Apply for Early Access
-            </button>
-            <p className="text-sm text-text-muted">
-              We&apos;re building this with contractors, for contractors. Your feedback shapes the product.
+      {/* ── EXPIRATION TRACKING ── */}
+      <section className="bg-gray-50 border-y border-gray-100 py-24 px-6">
+        <div className="max-w-4xl mx-auto">
+          <div className="text-center mb-16 space-y-4">
+            <p className="text-xs font-bold text-gray-400 uppercase tracking-widest">Expiration Tracking</p>
+            <h2 className="text-4xl md:text-5xl font-extrabold tracking-tight text-gray-900">
+              Never get surprised by an expired document again.
+            </h2>
+            <p className="text-xl text-gray-500 max-w-2xl mx-auto leading-relaxed">
+              VendorOS tracks every expiration date and sends automated reminders before documents lapse — so you stay ahead, not caught off guard.
+            </p>
+          </div>
+          <div className="max-w-2xl mx-auto space-y-3">
+            {[
+              { days: '30 days',  vendor: 'Martinez Plumbing', doc: 'Certificate of Insurance',   bg: 'bg-blue-50',   border: 'border-blue-100',   text: 'text-blue-700',   dot: 'bg-blue-400'   },
+              { days: '14 days',  vendor: 'Apex Roofing',      doc: 'General Liability Policy',   bg: 'bg-amber-50',  border: 'border-amber-100',  text: 'text-amber-700',  dot: 'bg-amber-400'  },
+              { days: '7 days',   vendor: 'Superior HVAC',     doc: 'Workers Comp Insurance',     bg: 'bg-orange-50', border: 'border-orange-100', text: 'text-orange-700', dot: 'bg-orange-500' },
+              { days: 'Expired',  vendor: 'Delta Flooring',    doc: 'Business License',           bg: 'bg-red-50',    border: 'border-red-100',    text: 'text-red-700',    dot: 'bg-red-500'    },
+            ].map((alert) => (
+              <div key={alert.vendor} className={`flex items-center justify-between p-4 rounded-xl border ${alert.border} ${alert.bg}`}>
+                <div className="flex items-center gap-3">
+                  <span className={`w-2 h-2 rounded-full flex-shrink-0 ${alert.dot}`} />
+                  <div>
+                    <p className="text-sm font-semibold text-gray-900">{alert.vendor}</p>
+                    <p className="text-xs text-gray-500">{alert.doc}</p>
+                  </div>
+                </div>
+                <span className={`text-xs font-bold px-2.5 py-1 rounded-full border ${alert.border} ${alert.text} bg-white`}>
+                  {alert.days}
+                </span>
+              </div>
+            ))}
+            <p className="text-center text-xs text-gray-400 pt-2">
+              Automated reminders sent to vendors at 30, 14, and 7 days before expiration
             </p>
           </div>
         </div>
       </section>
 
-      {/* Final CTA Section */}
-      <section className="bg-gray-50 py-28 px-6 text-center border-t border-gray-100">
-        <div className="max-w-2xl mx-auto">
-          <h2 className="text-4xl font-black mb-6 tracking-tight">Your vendors won&apos;t chase themselves. But now you don&apos;t have to either.</h2>
-          <p className="text-lg text-text-muted mb-10 leading-relaxed">
-            Join 500+ contractors and PMs already on the waitlist.
-          </p>
-          <div className="max-w-md mx-auto">
-            {status === 'success' ? (
-              <div className="bg-green-50 text-green-700 p-6 rounded-xl font-semibold border border-green-200">
-                ✓ You&apos;re on the list!
-              </div>
-            ) : (
-              <form onSubmit={(e) => handleSubmit(e, 'footer_form')} className="flex flex-col sm:flex-row gap-3">
-                <input
-                  type="email"
-                  placeholder="Enter your work email"
-                  required
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="flex-1 px-5 py-4 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-accent transition-all shadow-sm text-lg"
-                  disabled={status === 'loading'}
-                />
-                <button
-                  type="submit"
-                  disabled={status === 'loading'}
-                  className="bg-accent text-white px-10 py-4 rounded-xl font-bold text-xl hover:bg-blue-600 transition-all shadow-md disabled:opacity-50"
-                >
-                  {status === 'loading' ? 'Join' : 'Join the Waitlist'}
-                </button>
-              </form>
-            )}
+      {/* ── AUTOMATION ── */}
+      <section className="py-24 px-6">
+        <div className="max-w-4xl mx-auto">
+          <div className="text-center mb-16">
+            <p className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-4">Workflow Automation</p>
+            <h2 className="text-4xl md:text-5xl font-extrabold tracking-tight text-gray-900">
+              Less manual work.<br className="hidden md:block" /> More operational control.
+            </h2>
           </div>
-          <p className="mt-8 text-text-muted font-medium italic">Early access opening soon. Limited spots available.</p>
+          <div className="grid md:grid-cols-3 gap-8">
+            {[
+              {
+                icon: '🔔',
+                title: 'Automated reminders',
+                desc: 'System nudges vendors when documents are missing or expiring. You stop being the messenger.',
+              },
+              {
+                icon: '📋',
+                title: 'Compliance detection',
+                desc: 'VendorOS identifies document type on upload and validates required fields automatically.',
+              },
+              {
+                icon: '📊',
+                title: 'Project-level visibility',
+                desc: 'See compliance status across every vendor on every active project from a single dashboard.',
+              },
+            ].map((f) => (
+              <div key={f.title} className="p-6 rounded-2xl border border-gray-100 bg-white">
+                <div className="text-2xl mb-4">{f.icon}</div>
+                <h3 className="font-bold text-gray-900 mb-2">{f.title}</h3>
+                <p className="text-sm text-gray-500 leading-relaxed">{f.desc}</p>
+              </div>
+            ))}
+          </div>
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="py-16 px-6 border-t border-gray-100 text-center text-text-muted text-sm font-medium">
-        <div className="flex justify-center gap-8 mb-8">
-          <a href="#" className="hover:text-accent transition-colors">Privacy</a>
-          <a href="#" className="hover:text-accent transition-colors">Terms</a>
-          <a href="#" className="hover:text-accent transition-colors">Contact</a>
+      {/* ── FINAL CTA ── */}
+      <section id="waitlist" className="bg-gray-900 py-28 px-6">
+        <div className="max-w-2xl mx-auto text-center space-y-8">
+          <h2 className="text-4xl md:text-5xl font-extrabold tracking-tight text-white">
+            Finally, someone fixed this nightmare.
+          </h2>
+          <p className="text-xl text-gray-400 leading-relaxed">
+            Join construction teams getting early access to VendorOS. We&apos;re onboarding 5 pilot teams now.
+          </p>
+          {status === 'success' ? (
+            <div className="inline-flex items-center gap-2 px-6 py-4 bg-green-900/40 text-green-400 rounded-xl font-semibold border border-green-800 text-sm">
+              ✓ You&apos;re on the list — we&apos;ll be in touch soon.
+            </div>
+          ) : (
+            <form onSubmit={(e) => handleSubmit(e, 'footer_form')} className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
+              <input
+                type="email"
+                placeholder="Work email"
+                required
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="flex-1 px-4 py-3.5 rounded-xl border border-gray-700 bg-gray-800 text-white placeholder:text-gray-500 text-sm focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all"
+                disabled={status === 'loading'}
+              />
+              <button
+                type="submit"
+                disabled={status === 'loading'}
+                className="bg-white text-gray-900 px-6 py-3.5 rounded-xl font-semibold text-sm hover:bg-gray-100 transition-all disabled:opacity-50 whitespace-nowrap"
+              >
+                {status === 'loading' ? 'Sending...' : 'Request Early Access'}
+              </button>
+            </form>
+          )}
+          {status === 'error' && <p className="text-sm text-red-400">{message}</p>}
+          <p className="text-sm text-gray-500 italic">Early access opening soon. Limited spots.</p>
         </div>
-        &copy; {new Date().getFullYear()} VendorOS. All rights reserved. Stop chasing. Start building.
+      </section>
+
+      {/* ── FOOTER ── */}
+      <footer className="border-t border-gray-100 py-10 px-6 bg-white">
+        <div className="max-w-5xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4 text-sm text-gray-400">
+          <span className="font-semibold text-gray-600">VendorOS</span>
+          <div className="flex gap-6">
+            <a href="#" className="hover:text-gray-600 transition-colors">Privacy</a>
+            <a href="#" className="hover:text-gray-600 transition-colors">Terms</a>
+            <a href="#" className="hover:text-gray-600 transition-colors">Contact</a>
+          </div>
+          <span>© {new Date().getFullYear()} VendorOS. All rights reserved.</span>
+        </div>
       </footer>
     </div>
-  );
+  )
 }
